@@ -42,7 +42,7 @@
     <init-param>
       <param-name>swagger.api.basepath</param-name>
 <!--       <param-value>http://localhost:8080/hotspice/v1</param-value> -->
-      <param-value>http://hotspice-env.us-west-2.elasticbeanstalk.com/hotspice/v1</param-value>
+      <param-value>http://hotspice-env.us-west-2.elasticbeanstalk.com/v1</param-value>
 
     </init-param>
     <load-on-startup>2</load-on-startup>
