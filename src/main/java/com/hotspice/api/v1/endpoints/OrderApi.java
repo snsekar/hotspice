@@ -13,6 +13,7 @@ import java.util.TimeZone;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -31,6 +32,7 @@ import com.hotspice.api.v1.models.DishOrder;
 import com.hotspice.api.v1.models.Order;
 import com.hotspice.api.v1.models.OrderItemQuantity;
 import com.hotspice.api.v1.models.OrderStatus;
+import com.hotspice.security.Secured;
 import com.mongodb.AggregationOutput;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
@@ -47,8 +49,9 @@ public class OrderApi {
 	
 	@POST	
 	@Consumes("application/json")
+	@Secured
 	@ApiOperation(value = "Place a new order", response = String.class,position = 50)	
-	public String createOrder(Order order) throws Exception{	
+	public String createOrder(Order order, @HeaderParam("Authorization") String authorizationHeader ) throws Exception{	
 		DBObject newOrder = new BasicDBObject();
 		long now = System.currentTimeMillis();
 		newOrder.put("ordered_time",now);
@@ -66,16 +69,18 @@ public class OrderApi {
 	
 	@GET
 	@Path("/{order_id}")
+	@Secured
 	@ApiOperation(value = "View order", response = String.class,position = 60)	
-	public String viewOrder(@PathParam("order_id") String order_id ) throws Exception{	
+	public String viewOrder(@PathParam("order_id") String order_id , @HeaderParam("Authorization") String authorizationHeader ) throws Exception{	
 		DBObject stream = ORDERS.findOne(new BasicDBObject("_id", new ObjectId(order_id)));
 		stream.put("_id", order_id);
 		return apiResponse("ok","View Order",objectMapper.writeValueAsString(stream));		
 	}
 	
 	@GET
+	@Secured
 	@ApiOperation(value = "View all orders", response = String.class,position = 70)	
-	public String viewOrders(@QueryParam("sort_by") String sort_by) throws Exception{		
+	public String viewOrders(@QueryParam("sort_by") String sort_by, @HeaderParam("Authorization") String authorizationHeader ) throws Exception{		
 		ArrayNode ordersResult = objectMapper.readValue("[]", ArrayNode.class);
 		if(sort_by == null || "".equals(sort_by)){
 			sort_by = "ordered_time";
@@ -100,8 +105,9 @@ public class OrderApi {
 
 	@PUT
 	@Consumes("application/json")
+	@Secured
 	@ApiOperation(value = "Update order", response = String.class,position = 100)	
-	public String updateOrder(String jsonContent) throws Exception{		
+	public String updateOrder(String jsonContent, @HeaderParam("Authorization") String authorizationHeader ) throws Exception{		
 		ObjectNode content = objectMapper.readValue(jsonContent, ObjectNode.class);		
 		content.remove("ordered_time");
 		System.out.println(objectMapper.writeValueAsString(content));
@@ -113,8 +119,9 @@ public class OrderApi {
 	@PUT
 	@Path("/status")
 	@Consumes("application/json")
+	@Secured
 	@ApiOperation(value = "Update order status", response = String.class,position = 110)	
-	public String updateOrderStaus(OrderStatus os) throws Exception{		
+	public String updateOrderStaus(OrderStatus os, @HeaderParam("Authorization") String authorizationHeader ) throws Exception{		
 		
 		DBObject data = new BasicDBObject("status",os.status);
 		ORDERS.update(new BasicDBObject("_id", new ObjectId(os.order_id)), new BasicDBObject("$set",data),false,false);
@@ -124,8 +131,9 @@ public class OrderApi {
 	@PUT
 	@Path("/itemquantity")
 	@Consumes("application/json")
+	@Secured
 	@ApiOperation(value = "Update order item quantity", response = String.class,position = 120)	
-	public String updateOrderItemQuantity(OrderItemQuantity oiq) throws Exception{			
+	public String updateOrderItemQuantity(OrderItemQuantity oiq, @HeaderParam("Authorization") String authorizationHeader ) throws Exception{			
 		DBObject data = new BasicDBObject("quantity",oiq.quantity);
 		ORDERITEMS.update(new BasicDBObject("_id", new ObjectId(oiq.order_item_id)), new BasicDBObject("$set",data),false,false);
 		return  apiResponse("ok","Update success");

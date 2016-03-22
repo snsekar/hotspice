@@ -26,7 +26,8 @@
                 com.wordnik.swagger.jersey.listing.ApiListingResourceJSON,
                 com.wordnik.swagger.jersey.listing.JerseyApiDeclarationProvider,
                 com.wordnik.swagger.jersey.listing.JerseyResourceListingProvider,
-                com.hotspice.CORSFilter
+                com.hotspice.CORSFilter,
+                com.hotspice.security.AuthenticationFilter
             </param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
@@ -41,8 +42,8 @@
     </init-param>
     <init-param>
       <param-name>swagger.api.basepath</param-name>
-<!--       <param-value>http://localhost:8080/hotspice/v1</param-value> -->
-      <param-value>http://hotspice-env.us-west-2.elasticbeanstalk.com/v1</param-value>
+<!--       <param-value>http://localhost:8080/hotspice/v1</param-value>
+ -->      <param-value>http://hotspice-env.us-west-2.elasticbeanstalk.com/v1</param-value>
 
     </init-param>
     <load-on-startup>2</load-on-startup>
@@ -58,5 +59,9 @@
   <error-page>
     <error-code>404</error-code>
     <location>/error/apinotfound.json</location>
+  </error-page>
+    <error-page>
+    <error-code>401</error-code>
+    <location>/error/unauthorized.json</location>
   </error-page>
 </web-app>

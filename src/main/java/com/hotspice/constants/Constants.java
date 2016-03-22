@@ -23,9 +23,25 @@ public class Constants {
 	public static final String	DB_CATEGORIES = "CATEGORIES";
 	
 	public static final String	DB_ORDERITEMS = "ORDERITEMS";
+	
+	public static final String	DB_USERS = "USERS";
 
 
 	/* DB */
+	
+	/*Security*/
+	
+	public static final String	PASSWORD_SALT = "YKywDNthIxMp9aNu";
+	
+	//Key key = MacProvider.generateKey();
+	public static final String API_SECRET = "YKywDNthIxMp9aNu/UbcxHxWnlDj0Vp+EHWU6h9o4Z37BTQhfs0U0wi4chHr2/wXAxPqAU3FRne/hlty+3LU0A==";
+	
+	public static int TOKEN_EXPIRATION_TIME = 10; //minutes
+
+	
+	
+	/*Security*/
+	
 
 }
 	

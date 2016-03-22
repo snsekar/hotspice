@@ -13,6 +13,7 @@ import java.util.TimeZone;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -31,6 +32,7 @@ import com.hotspice.api.v1.models.DishOrder;
 import com.hotspice.api.v1.models.Order;
 import com.hotspice.api.v1.models.OrderItemQuantity;
 import com.hotspice.api.v1.models.OrderStatus;
+import com.hotspice.security.Secured;
 import com.mongodb.AggregationOutput;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
@@ -47,8 +49,9 @@ public class CategoryApi {
 	
 	@POST
 	@Consumes("application/json")
+	@Secured
 	@ApiOperation(value = "Create a new Category", response = String.class,position = 40)	
-	public String createCategory(Category category) throws Exception{		
+	public String createCategory(Category category, @HeaderParam("Authorization") String authorizationHeader ) throws Exception{		
 		DBObject d = CATEGORIES.findOne(new BasicDBObject("category",category.category));
 		if(d == null){
 			BasicDBObject n = new BasicDBObject(				
@@ -61,16 +64,18 @@ public class CategoryApi {
 	}
 	
 	@GET
+	@Secured
 	@ApiOperation(value = "Get all categories", response = String.class,position = 80)	
-	public String getAllCategories() throws Exception{	
+	public String getAllCategories(@HeaderParam("Authorization") String authorizationHeader ) throws Exception{	
 		ArrayList<String> categories =  (ArrayList<String>) CATEGORIES.distinct("category");
 		return apiResponse("ok","Get all categories",objectMapper.writeValueAsString(categories));		
 	}
 	
 	@GET
 	@Path("/{category}/dishes")
+	@Secured
 	@ApiOperation(value = "Get dishes from categories", response = String.class,position = 90)	
-	public String getDishesCategory(@PathParam("category") String category ) throws Exception{	
+	public String getDishesCategory(@PathParam("category") String category , @HeaderParam("Authorization") String authorizationHeader ) throws Exception{	
 		ArrayList<String> dishes =  (ArrayList<String>) DISHES.distinct("dish_name",new BasicDBObject("category",category));
 		return apiResponse("ok","Get dishes from categories",objectMapper.writeValueAsString(dishes));		
 	}

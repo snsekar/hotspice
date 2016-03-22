@@ -26,6 +26,7 @@ public class SystemInit {
 	public static DBCollection ORDERS;
 	public static DBCollection CATEGORIES;
 	public static DBCollection ORDERITEMS;
+	public static DBCollection USERS;
 
 	static {
 	
@@ -36,7 +37,9 @@ public class SystemInit {
 		ORDERS				= 	DB.getCollection(DB_ORDERS);
 		CATEGORIES			= 	DB.getCollection(DB_CATEGORIES);
 		ORDERITEMS			= 	DB.getCollection(DB_ORDERITEMS);
+		USERS				= 	DB.getCollection(DB_USERS);
 
+		
 	}
 
 }
